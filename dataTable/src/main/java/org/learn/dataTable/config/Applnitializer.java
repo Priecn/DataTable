@@ -21,5 +21,4 @@ public class Applnitializer extends AbstractAnnotationConfigDispatcherServletIni
 		System.out.println("hey");
 		return new String[] {"/"};
 	}
-
 }
