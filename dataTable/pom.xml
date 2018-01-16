@@ -14,6 +14,7 @@
 		<spring.version>5.0.2.RELEASE</spring.version>
 		<postgre.version>42.1.4</postgre.version>
 		<hibernate.version>5.2.12.Final</hibernate.version>
+		<hibernate.validator>6.0.7.Final</hibernate.validator>
 		<jackson.version>2.9.3</jackson.version>
 	</properties>
 	<dependencies>
@@ -84,6 +85,13 @@
 			<version>${hibernate.version}</version>
 		</dependency>
 
+		<!-- Hibernate Validator -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator}</version>
+        </dependency>
+        
 		<!-- DB connection pooling -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

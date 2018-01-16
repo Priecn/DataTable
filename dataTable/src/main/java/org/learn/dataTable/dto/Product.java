@@ -7,34 +7,37 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name="datatable_product")
 public class Product {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String code;
+	@NotEmpty
+	@Size(min=2, max=50, message="{name.size}")
 	private String name;
+	@NotEmpty
+	@Size(min=2, max=50, message="{brand.size}")
 	private String brand;
-	@JsonIgnore
-	private String description;
+	@NotNull
+	@Max(value=1000, message="{price.max}")
+	@Min(value=1, message="{price.min}")
 	@Column(name = "unit_price")
 	private double unitPrice;
+	@NotNull
+	@Max(value=1000, message="{quantity.max}")
+	@Min(value=1, message="{quantity.min}")
 	private int quantity;
-	@Column(name="is_active")
-	@JsonIgnore
-	private boolean active;
-	@Column(name="category_id")
-	@JsonIgnore
-	private int categoryId;
-	@Column(name="supplier_id")
-	@JsonIgnore
-	private int supplierId;
-	private int purchases;
-	private int views;
 	
 	public Product() {
 		this.code = "PRD"+UUID.randomUUID().toString().substring(26).toUpperCase();
@@ -43,9 +46,7 @@ public class Product {
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	
 	public String getCode() {
 		return code;
 	}
@@ -58,12 +59,6 @@ public class Product {
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
 	public double getUnitPrice() {
 		return unitPrice;
 	}
@@ -75,36 +70,6 @@ public class Product {
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-	public boolean isActive() {
-		return active;
-	}
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-	public int getCategoryId() {
-		return categoryId;
-	}
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
-	}
-	public int getSupplierId() {
-		return supplierId;
-	}
-	public void setSupplierId(int supplierId) {
-		this.supplierId = supplierId;
-	}
-	public int getPurchases() {
-		return purchases;
-	}
-	public void setPurchases(int purchases) {
-		this.purchases = purchases;
-	}
-	public int getViews() {
-		return views;
-	}
-	public void setViews(int views) {
-		this.views = views;
 	}
 
 	public String getName() {

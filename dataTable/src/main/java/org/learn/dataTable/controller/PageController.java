@@ -1,17 +1,86 @@
 package org.learn.dataTable.controller;
 
+import javax.validation.Valid;
+
+import org.learn.dataTable.dto.Product;
+import org.learn.dataTable.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/")
 public class PageController {
+	
+	@Autowired
+	private	ProductService service;
 
-	@RequestMapping(method=RequestMethod.GET)
-	public String index() {
+	@ModelAttribute
+	public Product newProduct() {
+		return new Product();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String index(Model model) {
+		return "home";
+	}
+
+	@RequestMapping(value="/delete/{productId}/product", method = RequestMethod.POST)
+	public String delete(@PathVariable int productId) {
+		service.delete(productId);
 		return "home";
 	}
 	
+	@RequestMapping(value="/product/{productId}", method = RequestMethod.GET)
+	public @ResponseBody Product getAProduct(@PathVariable int productId) {
+		return service.get(productId);
+	}
+
+	@RequestMapping(value="/add/product", method = RequestMethod.POST)
+	public String addProduct(@ModelAttribute @Validated Product product) {
+		service.add(product);
+		return "home";
+	}
 	
+	@RequestMapping(value="/update/{productId}/product", method = RequestMethod.POST)
+	public String updateProduct(@Valid Product product, Errors errors, @PathVariable int productId) {
+		System.out.println(errors);
+		if(errors.hasErrors())
+			return "update";
+		
+		System.out.println(product.getBrand());
+		System.out.println(product.getId());
+		try {
+		service.update(productId, product);
+		} catch(Exception e) {
+			System.out.println("Controller: "+e.getMessage());
+			e.printStackTrace();
+		}
+		return "home";
+	}
+	
+	/*@RequestMapping(value="/update/product", method = RequestMethod.POST)
+	public String updateAProduct(@ModelAttribute @Valid Product product) {
+		System.out.println(product.getBrand());
+		try {
+		service.update(product);
+		} catch(Exception e) {
+			System.out.println("Controller: "+e.getMessage());
+			e.printStackTrace();
+		}
+		return "home";
+	}*/
+	
+	@RequestMapping(value="/update", method = RequestMethod.GET)
+	public String update() {
+		
+		return "update";
+	}
 }

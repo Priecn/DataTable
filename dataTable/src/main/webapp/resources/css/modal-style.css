@@ -54,11 +54,19 @@
 	border: 3px solid #f15e5e;
 }
 
-.modal-confirm .icon-box i {
+.modal-confirm .icon-box i.delete{
 	color: #f15e5e;
 	font-size: 46px;
 	display: inline-block;
 	margin-top: 13px;
+}
+
+.modal-confirm .icon-box i.edit{
+	color: #f15e5e;
+	font-size: 46px;
+	display: inline-block;
+	margin-top: 13px;
+	margin-left: -180px;
 }
 
 .modal-confirm .btn {
