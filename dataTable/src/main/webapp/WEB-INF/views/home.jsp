@@ -3,7 +3,7 @@
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
 
 <spring:url var="css" value="/resources/css" />
 <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
@@ -44,6 +44,15 @@
 	<div class="wrapper">
 		<div class="content">
 			<div class="container">
+				<div class="row">
+					<div class="col-xs-9"></div>
+					<div class="col-xs-3">
+						<button class="btn btn-primary" data-toggle="modal"
+							data-target="#add-row-modal">
+							<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add
+						</button>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-xs-12">
 
@@ -106,7 +115,7 @@
 		</div>
 	</div>
 
-	<!-- Update/Insert Modal -->
+	<!-- Update Modal -->
 	<div id="update-row-modal" class="modal fade">
 		<div class="modal-dialog modal-confirm">
 			<div class="modal-content">
@@ -116,41 +125,81 @@
 						<!-- &#xe014; -->
 					</div>
 					<h4 class="modal-title">Update Product</h4>
-					<button type="button" class="close" data-dismiss="modal"
+					<button type="button" class="close cancel" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
-					<sf:form method="POST" modelAttribute="product" id="update-product">
-						<sf:hidden path="code" id="code"/>
-						<sf:hidden path="id" id="id"/>
+					<form method="POST" id="update-product" name="update-product-form">
 						<div class="form-group">
-							<label>Product Name</label>
-							<sf:input path="name" type="text" id="name" class="form-control"/>
-							<sf:errors path="name" />
+							<label>Product Name</label> <input type="text" name="name"
+								id="name" class="form-control" />
 						</div>
 						<div class="form-group">
-							<label>Product Brand</label>
-							<sf:input path="brand" type="text" id="brand" class="form-control"/>
-							<sf:errors path="brand" />
+							<label>Product Brand</label> <input type="text" name="brand"
+								id="brand" class="form-control" />
 						</div>
 						<div class="form-group">
-							<label>Product Unit Price</label>
-							<sf:input path="unitPrice" type="text" id="price" class="form-control"/>
-							<sf:errors path="unitPrice" />
+							<label>Product Unit Price</label> <input type="text" id="price"
+								name="price" class="form-control" />
 						</div>
 						<div class="form-group">
-							<label>Quantity</label>
-							<sf:input path="quantity" type="text" id="quantity" class="form-control"/>
-							<sf:errors path="quantity" />
+							<label>Quantity</label> <input type="text" id="quantity"
+								name="quantity" class="form-control" />
 						</div>
-						
-						<sf:button type="submit" class="btn btn-primary">
+
+						<button type="submit" class="btn btn-primary">
 							<span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Update
-						</sf:button>
-					</sf:form>
+						</button>
+					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-info cancel"
+						data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Add Modal -->
+	<div id="add-row-modal" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="icon-box">
+						<i class="material-icons add">add</i>
+						<!-- &#xe014; -->
+					</div>
+					<h4 class="modal-title">Add Product</h4>
+					<button type="button" class="close cancel" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form method="POST" id="add-product" name="add-product-form">
+						<div class="form-group">
+							<label>Product Name</label> <input type="text" name="name"
+								id="add_name" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label>Product Brand</label> <input type="text" name="brand"
+								id="add_brand" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label>Product Unit Price</label> <input type="text"
+								id="add_price" name="price" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label>Quantity</label> <input type="text" id="add_quantity"
+								name="quantity" class="form-control" />
+						</div>
+
+						<button type="submit" class="btn btn-primary">
+							<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add
+						</button>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-info cancel"
+						data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -210,104 +259,255 @@
 					});
 		};
 
-		$(document).ready(
-				function() {
-					//deleting a product
-					$(document).on(
-							'click',
-							'.delete',
-							function() {
-								var product_id = $(this).attr('id');
-								$('#delete-product').attr(
-										'action',
-										window.contextRoot + '/delete/'
-												+ product_id + '/product');
+		$(document)
+				.ready(
+						function() {
+							//deleting a product
+							$(document).on(
+									'click',
+									'.delete',
+									function() {
+										var product_id = $(this).attr('id');
+										$('#delete-product').attr(
+												'action',
+												window.contextRoot + '/delete/'
+														+ product_id
+														+ '/product');
+									});
+							$('#delete-product').on(
+									'submit',
+									function(event) {
+										event.preventDefault();
+										$.ajax({
+											url : $('#delete-product').attr(
+													'action'),
+											method : 'post',
+											success : function() {
+												$('#productListTable')
+														.DataTable().ajax
+														.reload();
+											}
+										});
+										event.stopPropagation();
+										$("#delete-row-modal").modal('hide');
+									});
+
+							//updating a product
+
+							$(document)
+									.on(
+											'click',
+											'.update',
+											function() {
+												var product_id = $(this).attr(
+														'id');
+												$
+														.ajax({
+															url : window.contextRoot
+																	+ '/product/'
+																	+ product_id,
+															method : 'GET',
+															dataType : 'json',
+															success : function(
+																	data) {
+																$('#name')
+																		.val(
+																				data.name);
+																$('#brand')
+																		.val(
+																				data.brand);
+																$('#price')
+																		.val(
+																				data.unitPrice);
+																$('#quantity')
+																		.val(
+																				data.quantity);
+
+																$(
+																		'#update-product')
+																		.attr(
+																				'action',
+																				window.contextRoot
+																						+ '/update/'
+																						+ product_id
+																						+ '/product');
+															},
+															complete : function() {
+																console
+																		.log('complete');
+															}
+														});
+											});
+
+							var validateUpdateForm = $(
+									"form[name='update-product-form']")
+									.validate(
+											{
+												// Specify validation rules
+												rules : {
+													// The key name on the left side is the name attribute
+													// of an input field. Validation rules are defined
+													// on the right side
+													name : "required",
+													brand : "required",
+													price : {
+														required : true,
+														range : [ 1, 50000 ]
+
+													},
+													quantity : {
+														required : true,
+														range : [ 1, 1000 ]
+													}
+												},
+												// Specify validation error messages
+												messages : {
+													name : "please enter name",
+													brand : "please enter brand",
+													price : {
+														required : "please enter price",
+														range : "price should be in range 1 to 50000"
+
+													},
+													quantity : {
+														required : "please enter quantity",
+														range : "quantity should be in range 1 to 1000"
+													}
+												},
+												// Make sure the form is submitted to the destination defined
+												// in the "action" attribute of the form when valid
+												submitHandler : function(form) {
+													url = $('#update-product')
+															.attr('action');
+													formData = {
+														'name' : $('#name')
+																.val(),
+														'brand' : $('#brand')
+																.val(),
+														'unitPrice' : $(
+																'#price').val(),
+														'quantity' : $(
+																'#quantity')
+																.val()
+													};
+
+													$
+															.ajax({
+																headers : {
+																	'Accept' : 'application/json',
+																	'Content-Type' : 'application/json'
+																},
+																type : 'POST',
+																dataType : 'json',
+																url : url,
+																data : JSON
+																		.stringify(formData),
+																statusCode : {
+																	200 : function() {
+																		console
+																				.log('success');
+																		$(
+																				'#productListTable')
+																				.DataTable().ajax
+																				.reload();
+																		$(
+																				'#update-row-modal')
+																				.modal(
+																						'hide');
+																	}
+																}
+															});
+												}
+											});
+
+							var validatAddForm = $(
+									"form[name='add-product-form']")
+									.validate(
+											{
+												// Specify validation rules
+												rules : {
+													// The key name on the left side is the name attribute
+													// of an input field. Validation rules are defined
+													// on the right side
+													name : "required",
+													brand : "required",
+													price : {
+														required : true,
+														range : [ 1, 50000 ]
+
+													},
+													quantity : {
+														required : true,
+														range : [ 1, 1000 ]
+													}
+												},
+												// Specify validation error messages
+												messages : {
+													name : "please enter name",
+													brand : "please enter brand",
+													price : {
+														required : "please enter price",
+														range : "price should be in range 1 to 50000"
+
+													},
+													quantity : {
+														required : "please enter quantity",
+														range : "quantity should be in range 1 to 1000"
+													}
+												},
+												// Make sure the form is submitted to the destination defined
+												// in the "action" attribute of the form when valid
+												submitHandler : function(form) {
+													url = window.contextRoot
+															+ '/add/product';
+													formData = {
+														'name' : $('#add_name')
+																.val(),
+														'brand' : $(
+																'#add_brand')
+																.val(),
+														'unitPrice' : $(
+																'#add_price')
+																.val(),
+														'quantity' : $(
+																'#add_quantity')
+																.val()
+													};
+
+													$
+															.ajax({
+																headers : {
+																	'Accept' : 'application/json',
+																	'Content-Type' : 'application/json'
+																},
+																type : 'POST',
+																dataType : 'json',
+																url : url,
+																data : JSON
+																		.stringify(formData),
+																statusCode : {
+																	200 : function() {
+																		console
+																				.log('success');
+																		$(
+																				'#productListTable')
+																				.DataTable().ajax
+																				.reload();
+																		$(
+																				'#add-row-modal')
+																				.modal(
+																						'hide');
+																	}
+																}
+															});
+												}
+											});
+							$(document).on('click', '.cancel', function(event) {
+								event.preventDefault;
+								validateUpdateForm.resetForm();
 							});
-					$('#delete-product').on(
-							'submit',
-							function(event) {
-								event.preventDefault();
-								$.ajax({
-									url : $('#delete-product').attr('action'),
-									method : 'post',
-									success : function() {
-										$('#productListTable').DataTable().ajax
-												.reload();
-									}
-								});
-								event.stopPropagation();
-								$("#delete-row-modal").modal('hide');
-							});
 
-					//updating a product
-
-					$(document).on(
-							'click',
-							'.update',
-							function() {
-								var product_id = $(this).attr('id');
-								$.ajax({
-									url : window.contextRoot + '/product/'
-											+ product_id,
-									method : 'GET',
-									dataType : 'json',
-									success : function(data) {
-										$('#name').val(data.name);
-										$('#brand').val(data.brand);
-										$('#price').val(data.unitPrice);
-										$('#quantity').val(data.quantity);
-										$('#code').val(data.code);
-										$('#id').val(data.id);
-										
-										$('#update-product').attr('action', window.contextRoot+'/update/'+product_id+'/product');
-									},
-									complete: function(){
-										console.log('complete');
-										$('update-row-modal').modal('show');
-									}
-								});
-							});
-					
-					/* $('#update-product').on(
-							'submit',
-							function(event) {
-								event.preventDefault();
-								$.ajax({
-									url : $('#update-product').attr('action'),
-									method : 'post',
-									data: $('#update-product').serialize(),
-									success : function() {
-										$('#productListTable').DataTable().ajax
-												.reload();
-									}
-								});
-								event.stopPropagation();
-								$("#update-row-modal").modal('hide');
-							}); */
-
-				});
-		/* function deleteRow(event, elt, data) {
-			event.preventDefault();
-			$("#myModal").modal('show').one('click', '#delete', function(e) {
-				console.log('delete');
-				$("#myModal").modal('hide');
-				console.log('delete2');
-				$.ajax({
-					url : window.contextRoot + '/delete/' + data + '/product',
-					method : 'POST'
-				}).done(function(data) {
-					$('#productListTable').DataTable().ajax.reload();
-				});
-			}).one('click', '#cancel', function(e){
-				console.log('cancel');
-				$('#productListTable').DataTable().ajax.reload();
-			});
-			
-		}; */
-
-		function editRow(elt, data) {
-			alert(data);
-		};
+						});
 	</script>
 </body>
 </html>

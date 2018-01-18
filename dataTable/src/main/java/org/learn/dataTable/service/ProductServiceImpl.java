@@ -29,7 +29,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public boolean add(Product product) {
-		return dao.add(product);
+		Product newProduct = new Product();
+		newProduct.setName(product.getName());
+		newProduct.setBrand(product.getBrand());
+		newProduct.setQuantity(product.getQuantity());
+		newProduct.setUnitPrice(product.getUnitPrice());
+		return dao.add(newProduct);
 	}
 
 	@Override

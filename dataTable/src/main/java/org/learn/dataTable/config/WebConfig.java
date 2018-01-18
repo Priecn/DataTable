@@ -1,5 +1,7 @@
 package org.learn.dataTable.config;
 
+import java.util.Locale;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -35,9 +37,12 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Bean
 	public MessageSource getMessageSource() {
+		System.out.print("messageSource: ");
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setBasename("classpath:errors");
-		messageSource.setDefaultEncoding("UTF-8");
+		
+		System.out.println(messageSource.getBasenameSet());
+		System.out.println(messageSource.getMessage("test.error.msg", null, Locale.US));
 		return messageSource;
 	}
 

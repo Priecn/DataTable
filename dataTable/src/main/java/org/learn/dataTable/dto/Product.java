@@ -30,7 +30,7 @@ public class Product {
 	@Size(min=2, max=50, message="{brand.size}")
 	private String brand;
 	@NotNull
-	@Max(value=1000, message="{price.max}")
+	@Max(value=50000, message="{price.max}")
 	@Min(value=1, message="{price.min}")
 	@Column(name = "unit_price")
 	private double unitPrice;

@@ -69,6 +69,14 @@
 	margin-left: -180px;
 }
 
+.modal-confirm .icon-box i.add{
+	color: #f15e5e;
+	font-size: 86px;
+	display: inline-block;
+	margin-top: -8px;
+	margin-left: -6px;
+}
+
 .modal-confirm .btn {
 	color: #fff;
 	border-radius: 4px;
@@ -99,3 +107,7 @@
 .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
 	background: #ee3535;
 }
+
+.error {
+    color: #ff0000;
+  }
